@@ -3,20 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diseño de Mezclas de Concreto (ACI 211.1)</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Calculadora ACI 211.1 | Mezclas de Concreto</title>
+    <style>
+        /* Diseño Moderno y Limpio */
+        :root {
+            --primary-color: #2563eb;
+            --hover-color: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-top: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+            color: #334155;
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        input, select {
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        button {
+            grid-column: 1 / -1;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            margin-top: 1.5rem;
+        }
+
+        button:hover {
+            background-color: var(--hover-color);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .results {
+            background: #f1f5f9;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2.5rem;
+            border-left: 5px solid var(--primary-color);
+            display: none; /* Se oculta hasta que se calcula */
+        }
+
+        .results h2 {
+            margin-top: 0;
+            color: var(--text-main);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: #e2e8f0;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Dosificación de Mezclas de Concreto</h1>
+    <h1>Dosificación de Mezclas (ACI 211.1)</h1>
     
     <div class="grid">
-        <div>
+        <!-- Datos Generales -->
+        <div class="section-title">📘 Datos Generales del Proyecto</div>
+        
+        <div class="input-group">
             <label>f'c (Resistencia en kg/cm²)</label>
             <input type="number" id="fc" value="250">
         </div>
-        <div>
+        <div class="input-group">
             <label>Revenimiento (cm)</label>
             <select id="slump">
                 <option value="2.5">2.5 a 5.0 cm</option>
@@ -24,8 +171,7 @@
                 <option value="15">15 a 17.5 cm</option>
             </select>
         </div>
-
-        <div>
+        <div class="input-group">
             <label>TMN (Tamaño Máximo Nominal)</label>
             <select id="tmn">
                 <option value="9.5">3/8" (9.5 mm)</option>
@@ -34,43 +180,178 @@
                 <option value="25">1" (25 mm)</option>
             </select>
         </div>
-        <div>
+        <div class="input-group">
             <label>Densidad Relativa del Cemento</label>
             <input type="number" step="0.01" id="denCem" value="3.05">
         </div>
 
-        <!-- Materiales -->
-        <h3 class="full-width">Características de la Grava</h3>
-        <div><label>Densidad Relativa</label><input type="number" step="0.01" id="denGrava" value="2.58"></div>
-        <div><label>PVSC (kg/m³)</label><input type="number" id="pvscGrava" value="1590"></div>
-        <div><label>Absorción (%)</label><input type="number" step="0.01" id="absGrava" value="1.15"></div>
-        <div><label>Humedad (%)</label><input type="number" step="0.01" id="humGrava" value="0.16"></div>
+        <!-- Grava -->
+        <div class="section-title">🪨 Características de la Grava</div>
+        <div class="input-group">
+            <label>Densidad Relativa</label>
+            <input type="number" step="0.01" id="denGrava" value="2.58">
+        </div>
+        <div class="input-group">
+            <label>PVSC (kg/m³)</label>
+            <input type="number" id="pvscGrava" value="1590">
+        </div>
+        <div class="input-group">
+            <label>Absorción (%)</label>
+            <input type="number" step="0.01" id="absGrava" value="1.15">
+        </div>
+        <div class="input-group">
+            <label>Humedad (%)</label>
+            <input type="number" step="0.01" id="humGrava" value="0.16">
+        </div>
 
-        <h3 class="full-width">Características de la Arena</h3>
-        <div><label>Densidad Relativa</label><input type="number" step="0.01" id="denArena" value="2.54"></div>
-        <div><label>Módulo de Finura</label><input type="number" step="0.01" id="mfArena" value="2.60"></div>
-        <div><label>Absorción (%)</label><input type="number" step="0.01" id="absArena" value="1.72"></div>
-        <div><label>Humedad (%)</label><input type="number" step="0.01" id="humArena" value="1.82"></div>
+        <!-- Arena -->
+        <div class="section-title">⏳ Características de la Arena</div>
+        <div class="input-group">
+            <label>Densidad Relativa</label>
+            <input type="number" step="0.01" id="denArena" value="2.54">
+        </div>
+        <div class="input-group">
+            <label>Módulo de Finura</label>
+            <input type="number" step="0.01" id="mfArena" value="2.60">
+        </div>
+        <div class="input-group">
+            <label>Absorción (%)</label>
+            <input type="number" step="0.01" id="absArena" value="1.72">
+        </div>
+        <div class="input-group">
+            <label>Humedad (%)</label>
+            <input type="number" step="0.01" id="humArena" value="1.82">
+        </div>
 
         <button onclick="calcularDosificacion()">Calcular Dosificación</button>
     </div>
 
-    <div class="results" id="resultados" style="display:none;">
-        <h2>Resultados de Diseño para 1 m³</h2>
-        <p id="infoPasos"></p>
+    <!-- Contenedor de Resultados -->
+    <div class="results" id="resultados">
+        <h2>Resultados para 1 m³ de Concreto</h2>
+        <p id="infoPasos" style="font-size: 1.05rem; margin-bottom: 2rem;"></p>
         
         <h3>Método de Volúmenes Absolutos</h3>
         <table id="tablaAbsolutos">
-            <!-- Se llena con JS -->
+            <!-- Se llena con JavaScript -->
         </table>
 
         <h3>Método de Peso Estimado</h3>
         <table id="tablaPeso">
-            <!-- Se llena con JS -->
+            <!-- Se llena con JavaScript -->
         </table>
     </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+    // Tablas de referencia ACI
+    const aguaTabla = {
+        "2.5": { "9.5": 207, "12.5": 199, "19": 190, "25": 179 },
+        "7.5": { "9.5": 228, "12.5": 216, "19": 205, "25": 193 },
+        "15":  { "9.5": 243, "12.5": 228, "19": 216, "25": 202 }
+    };
+    
+    const aireTabla = { "9.5": 3.0, "12.5": 2.5, "19": 2.0, "25": 1.5 };
+
+    function obtenerVolGrava(tmn, mf) {
+        let baseVol = 0;
+        if (tmn == "9.5") baseVol = 0.50 - ((mf - 2.4) / 0.2) * 0.02;
+        if (tmn == "12.5") baseVol = 0.59 - ((mf - 2.4) / 0.2) * 0.02;
+        if (tmn == "19") baseVol = 0.66 - ((mf - 2.4) / 0.2) * 0.02;
+        if (tmn == "25") baseVol = 0.71 - ((mf - 2.4) / 0.2) * 0.02;
+        return parseFloat(baseVol.toFixed(2));
+    }
+
+    function obtenerRelacionAC(fcr) {
+        if(fcr >= 350) return 0.48 - ((fcr - 350) * (0.48 - 0.41) / (420 - 350));
+        if(fcr >= 280) return 0.57 - ((fcr - 280) * (0.57 - 0.48) / (350 - 280));
+        if(fcr >= 210) return 0.68 - ((fcr - 210) * (0.68 - 0.57) / (280 - 210));
+        return 0.82; 
+    }
+
+    function calcularDosificacion() {
+        // Capturar datos
+        let fc = parseFloat(document.getElementById('fc').value);
+        let slump = document.getElementById('slump').value;
+        let tmn = document.getElementById('tmn').value;
+        
+        let Gc = parseFloat(document.getElementById('denCem').value);
+        let denGrava = parseFloat(document.getElementById('denGrava').value);
+        let pvscGrava = parseFloat(document.getElementById('pvscGrava').value);
+        let absGrava = parseFloat(document.getElementById('absGrava').value);
+        let humGrava = parseFloat(document.getElementById('humGrava').value);
+        
+        let denArena = parseFloat(document.getElementById('denArena').value);
+        let mfArena = parseFloat(document.getElementById('mfArena').value);
+        let absArena = parseFloat(document.getElementById('absArena').value);
+        let humArena = parseFloat(document.getElementById('humArena').value);
+
+        // Cálculos
+        let fcr = fc < 210 ? fc + 70 : (fc <= 350 ? fc + 85 : (1.10 * fc) + 50);
+        let ac = obtenerRelacionAC(fcr);
+        
+        let agua = aguaTabla[slump][tmn];
+        let aire = aireTabla[tmn];
+        let cemento = agua / ac;
+
+        let volGravaVarillado = obtenerVolGrava(tmn, mfArena);
+        let pesoGrava = volGravaVarillado * pvscGrava;
+
+        let volCem = cemento / (Gc * 1000);
+        let volAgua = agua / 1000;
+        let volGrava = pesoGrava / (denGrava * 1000);
+        let volAire = aire / 100;
+        
+        let volArena = 1 - (volCem + volAgua + volGrava + volAire);
+        let pesoArena = volArena * denArena * 1000;
+
+        let Ga = (denGrava + denArena) / 2;
+        let U = (10 * Ga * (100 - aire)) + (cemento * (1 - (Ga / Gc))) - (agua * (Ga - 1));
+        let pesoArenaEstimado = U - (agua + cemento + pesoGrava);
+
+        let aguaEnGrava = pesoGrava * ((humGrava - absGrava) / 100);
+        let aguaEnArena = pesoArena * ((humArena - absArena) / 100);
+        let aguaAjustada = agua - (aguaEnGrava + aguaEnArena);
+        
+        let gravaAjustada = pesoGrava * (1 + (humGrava / 100));
+        let arenaAjustada = pesoArena * (1 + (humArena / 100));
+
+        // Mostrar sección de resultados
+        document.getElementById('resultados').style.display = 'block';
+        
+        // Imprimir resumen
+        document.getElementById('infoPasos').innerHTML = `
+            <strong>F'cr Calculado:</strong> ${fcr.toFixed(2)} kg/cm² <br>
+            <strong>Relación Agua/Cemento:</strong> ${ac.toFixed(2)} <br>
+            <strong>Agua de Diseño:</strong> ${agua} kg/m³ | <strong>Aire:</strong> ${aire}% <br>
+            <strong>Volumen de Grava Varillado:</strong> ${volGravaVarillado} <br>
+            <strong>Ajuste final de Agua:</strong> ${aguaAjustada.toFixed(2)} kg
+        `;
+
+        // Imprimir tabla absolutos
+        document.getElementById('tablaAbsolutos').innerHTML = `
+            <tr><th>Material</th><th>Peso Seco (kg)</th><th>Volumen (m³)</th><th>Peso Ajustado (kg)</th></tr>
+            <tr><td>Cemento</td><td>${cemento.toFixed(2)}</td><td>${volCem.toFixed(4)}</td><td>${cemento.toFixed(2)}</td></tr>
+            <tr><td>Agua</td><td>${agua.toFixed(2)}</td><td>${volAgua.toFixed(4)}</td><td>${aguaAjustada.toFixed(2)}</td></tr>
+            <tr><td>Grava</td><td>${pesoGrava.toFixed(2)}</td><td>${volGrava.toFixed(4)}</td><td>${gravaAjustada.toFixed(2)}</td></tr>
+            <tr><td>Arena</td><td>${pesoArena.toFixed(2)}</td><td>${volArena.toFixed(4)}</td><td>${arenaAjustada.toFixed(2)}</td></tr>
+            <tr><td>Aire</td><td>-</td><td>${volAire.toFixed(4)}</td><td>-</td></tr>
+        `;
+
+        // Imprimir tabla peso
+        document.getElementById('tablaPeso').innerHTML = `
+            <tr><th>Material</th><th>Peso Seco (kg)</th></tr>
+            <tr><td>Cemento</td><td>${cemento.toFixed(2)}</td></tr>
+            <tr><td>Agua</td><td>${agua.toFixed(2)}</td></tr>
+            <tr><td>Grava</td><td>${pesoGrava.toFixed(2)}</td></tr>
+            <tr><td>Arena</td><td>${pesoArenaEstimado.toFixed(2)}</td></tr>
+            <tr><td><strong>Densidad Teórica (U)</strong></td><td><strong>${U.toFixed(2)} kg/m³</strong></td></tr>
+        `;
+        
+        // Hacer scroll hacia abajo para ver los resultados automáticamente
+        document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
 </body>
 </html>
