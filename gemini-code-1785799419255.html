@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diseño de Mezclas de Concreto (ACI 211.1)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Dosificación de Mezclas de Concreto</h1>
+    
+    <div class="grid">
+        <div>
+            <label>f'c (Resistencia en kg/cm²)</label>
+            <input type="number" id="fc" value="250">
+        </div>
+        <div>
+            <label>Revenimiento (cm)</label>
+            <select id="slump">
+                <option value="2.5">2.5 a 5.0 cm</option>
+                <option value="7.5" selected>7.5 a 10 cm</option>
+                <option value="15">15 a 17.5 cm</option>
+            </select>
+        </div>
+
+        <div>
+            <label>TMN (Tamaño Máximo Nominal)</label>
+            <select id="tmn">
+                <option value="9.5">3/8" (9.5 mm)</option>
+                <option value="12.5">1/2" (12.5 mm)</option>
+                <option value="19" selected>3/4" (19 mm)</option>
+                <option value="25">1" (25 mm)</option>
+            </select>
+        </div>
+        <div>
+            <label>Densidad Relativa del Cemento</label>
+            <input type="number" step="0.01" id="denCem" value="3.05">
+        </div>
+
+        <!-- Materiales -->
+        <h3 class="full-width">Características de la Grava</h3>
+        <div><label>Densidad Relativa</label><input type="number" step="0.01" id="denGrava" value="2.58"></div>
+        <div><label>PVSC (kg/m³)</label><input type="number" id="pvscGrava" value="1590"></div>
+        <div><label>Absorción (%)</label><input type="number" step="0.01" id="absGrava" value="1.15"></div>
+        <div><label>Humedad (%)</label><input type="number" step="0.01" id="humGrava" value="0.16"></div>
+
+        <h3 class="full-width">Características de la Arena</h3>
+        <div><label>Densidad Relativa</label><input type="number" step="0.01" id="denArena" value="2.54"></div>
+        <div><label>Módulo de Finura</label><input type="number" step="0.01" id="mfArena" value="2.60"></div>
+        <div><label>Absorción (%)</label><input type="number" step="0.01" id="absArena" value="1.72"></div>
+        <div><label>Humedad (%)</label><input type="number" step="0.01" id="humArena" value="1.82"></div>
+
+        <button onclick="calcularDosificacion()">Calcular Dosificación</button>
+    </div>
+
+    <div class="results" id="resultados" style="display:none;">
+        <h2>Resultados de Diseño para 1 m³</h2>
+        <p id="infoPasos"></p>
+        
+        <h3>Método de Volúmenes Absolutos</h3>
+        <table id="tablaAbsolutos">
+            <!-- Se llena con JS -->
+        </table>
+
+        <h3>Método de Peso Estimado</h3>
+        <table id="tablaPeso">
+            <!-- Se llena con JS -->
+        </table>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
