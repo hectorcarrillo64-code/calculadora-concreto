@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora ACI 211.1 Avanzada</title>
+    <title>Calculadora ACI 211.1 Práctica</title>
     <style>
         :root { --primary: #0f766e; --bg: #f0fdfa; --card: #ffffff; --text: #0f172a; --border: #cbd5e1; --accent: #0284c7; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 2rem 1rem; line-height: 1.5; }
@@ -51,7 +51,7 @@
         
         <!-- Dinámico: Dimensiones -->
         <div class="full-width dynamic-section">
-            <h4 style="margin-top: 0; color: var(--accent); margin-bottom: 1rem;">📏 Dimensiones y Restricciones</h4>
+            <h4 style="margin-top: 0; color: var(--accent); margin-bottom: 1rem;">📏 Restricción de Cimbra</h4>
             <div class="grid">
                 <div class="input-group" id="grupoAncho">
                     <label>Dimensión menor de la sección (cm)</label>
@@ -61,11 +61,6 @@
                 <div class="input-group" id="grupoEspesor" style="display:none;">
                     <label>Espesor de la losa (cm)</label>
                     <input type="number" id="espLosa" value="15">
-                </div>
-
-                <div class="input-group">
-                    <label>Separación libre mínima entre acero (cm)</label>
-                    <input type="number" step="0.5" id="sepLibre" value="2.5">
                 </div>
             </div>
         </div>
@@ -153,12 +148,8 @@
         let fc = parseFloat(document.getElementById('fc').value);
         let mfArena = parseFloat(document.getElementById('mfArena').value);
         
-        let sepLibre = parseFloat(document.getElementById('sepLibre').value);
-        let tmn1 = 999, tmn2 = 999, tmn3 = 999;
+        let tmn1 = 999, tmn3 = 999;
         let textoDimensiones = "";
-
-        // Regla General: 3/4 de la separación libre mínima
-        tmn2 = (sepLibre * 0.75) * 10;
 
         if (tipo === 'losas') {
             let espLosa = parseFloat(document.getElementById('espLosa').value);
@@ -172,7 +163,7 @@
             textoDimensiones = `Límite por dimensión de cimbra: ${(tmn1/10).toFixed(2)} cm.`;
         }
 
-        let limiteTMN = Math.min(tmn1, tmn2, tmn3);
+        let limiteTMN = Math.min(tmn1, tmn3);
         let tmnSeleccionado = 9.5; 
         
         for (let i = tmnDisponibles.length - 1; i >= 0; i--) {
@@ -223,7 +214,6 @@
             <strong>📝 Resumen de Restricciones (ACI):</strong>
             <ul>
                 <li>${textoDimensiones}</li>
-                <li>Límite por separación libre de acero: ${(tmn2/10).toFixed(2)} cm.</li>
                 <li><strong>TMN Máximo Teórico:</strong> ${(limiteTMN/10).toFixed(2)} cm. Se asignó grava comercial de <strong>${tmnNombres[tmnSeleccionado]} (${tmnSeleccionado} mm)</strong>.</li>
                 <li><strong>Revenimiento sugerido:</strong> Máximo ${revMax} cm.</li>
                 <li><strong>Resistencia de Diseño ($f'cr$):</strong> ${fcr.toFixed(2)} kg/cm² (Con Relación A/C de ${ac.toFixed(3)}).</li>
