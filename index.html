@@ -3,352 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora ACI 211.1 | Mezclas de Concreto</title>
+    <title>Calculadora ACI 211.1 Avanzada</title>
     <style>
-        /* Diseño Moderno y Limpio */
-        :root {
-            --primary-color: #2563eb;
-            --hover-color: #1d4ed8;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 2rem 1rem;
-            line-height: 1.5;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 1rem;
-            margin-top: 0;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin: 2rem 0 1rem 0;
-            color: #334155;
-            grid-column: 1 / -1;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.25rem;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        input, select {
-            padding: 0.75rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 1rem;
-            background-color: #fff;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        button {
-            grid-column: 1 / -1;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 1rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            margin-top: 1.5rem;
-        }
-
-        button:hover {
-            background-color: var(--hover-color);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .results {
-            background: #f1f5f9;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-top: 2.5rem;
-            border-left: 5px solid var(--primary-color);
-            display: none; /* Se oculta hasta que se calcula */
-        }
-
-        .results h2 {
-            margin-top: 0;
-            color: var(--text-main);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            margin-bottom: 2rem;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            background-color: #e2e8f0;
-            color: var(--text-main);
-            font-weight: 600;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
+        :root { --primary: #0f766e; --bg: #f0fdfa; --card: #ffffff; --text: #0f172a; --border: #cbd5e1; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 2rem 1rem; }
+        .container { max-width: 950px; margin: 0 auto; background: var(--card); padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 1rem; }
+        .section-title { font-size: 1.2rem; font-weight: bold; margin: 1.5rem 0 1rem; color: #334155; border-left: 4px solid var(--primary); padding-left: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .input-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        label { font-size: 0.9rem; font-weight: 600; }
+        input, select { padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
+        .full-width { grid-column: 1 / -1; }
+        button { background-color: var(--primary); color: white; border: none; padding: 1rem; font-size: 1.1rem; border-radius: 6px; cursor: pointer; transition: 0.2s; margin-top: 1rem; width: 100%; font-weight: bold; }
+        button:hover { background-color: #0d9488; }
+        .results { background: #f8fafc; padding: 1.5rem; border-radius: 8px; margin-top: 2rem; border: 1px solid var(--border); display: none; }
+        .alert { background-color: #e0f2fe; border-left: 4px solid #0284c7; padding: 1rem; margin-bottom: 1rem; font-size: 0.95rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; }
+        th, td { padding: 0.8rem; text-align: center; border: 1px solid var(--border); }
+        th { background-color: #f1f5f9; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Dosificación de Mezclas (ACI 211.1)</h1>
+    <h1>Dosificación ACI 211.1 (Selección Automática)</h1>
     
     <div class="grid">
-        <!-- Datos Generales -->
-        <div class="section-title">📘 Datos Generales del Proyecto</div>
+        <div class="full-width section-title">🏗️ 1. Requisitos de la Estructura</div>
         
         <div class="input-group">
-            <label>f'c (Resistencia en kg/cm²)</label>
+            <label>Tipo de Estructura (ACI Tabla 6.3.1)</label>
+            <select id="tipoEstructura" onchange="actualizarCampos()">
+                <option value="zapatas">Zapatas y muros de cimentación</option>
+                <option value="vigas">Vigas y muros reforzados</option>
+                <option value="columnas">Columnas de edificios</option>
+                <option value="losas">Pavimentos y losas</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>f'c requerido (kg/cm²)</label>
             <input type="number" id="fc" value="250">
         </div>
         <div class="input-group">
-            <label>Revenimiento (cm)</label>
-            <select id="slump">
-                <option value="2.5">2.5 a 5.0 cm</option>
-                <option value="7.5" selected>7.5 a 10 cm</option>
-                <option value="15">15 a 17.5 cm</option>
-            </select>
+            <label>Dimensión más estrecha de cimbra (cm)</label>
+            <input type="number" id="dimCimbra" value="30">
         </div>
         <div class="input-group">
-            <label>TMN (Tamaño Máximo Nominal)</label>
-            <select id="tmn">
-                <option value="9.5">3/8" (9.5 mm)</option>
-                <option value="12.5">1/2" (12.5 mm)</option>
-                <option value="19" selected>3/4" (19 mm)</option>
-                <option value="25">1" (25 mm)</option>
-            </select>
+            <label>Separación libre entre varillas (cm)</label>
+            <input type="number" id="sepVarillas" value="5">
         </div>
-        <div class="input-group">
-            <label>Densidad Relativa del Cemento</label>
-            <input type="number" step="0.01" id="denCem" value="3.05">
+        <div class="input-group" id="grupoLosa" style="display:none;">
+            <label>Espesor de la losa (cm)</label>
+            <input type="number" id="espLosa" value="15">
         </div>
 
+        <div class="full-width section-title">⚙️ 2. Propiedades de los Materiales</div>
+        <div class="input-group"><label>Densidad Relativa Cemento</label><input type="number" step="0.01" id="denCem" value="3.15"></div>
+        <div class="input-group"><label>Módulo de Finura de Arena</label><input type="number" step="0.01" id="mfArena" value="2.60"></div>
+        
         <!-- Grava -->
-        <div class="section-title">🪨 Características de la Grava</div>
-        <div class="input-group">
-            <label>Densidad Relativa</label>
-            <input type="number" step="0.01" id="denGrava" value="2.58">
-        </div>
-        <div class="input-group">
-            <label>PVSC (kg/m³)</label>
-            <input type="number" id="pvscGrava" value="1590">
-        </div>
-        <div class="input-group">
-            <label>Absorción (%)</label>
-            <input type="number" step="0.01" id="absGrava" value="1.15">
-        </div>
-        <div class="input-group">
-            <label>Humedad (%)</label>
-            <input type="number" step="0.01" id="humGrava" value="0.16">
-        </div>
+        <div class="input-group"><label>Grava: Densidad Relativa</label><input type="number" step="0.01" id="denGrava" value="2.68"></div>
+        <div class="input-group"><label>Grava: PVSC (kg/m³)</label><input type="number" id="pvscGrava" value="1600"></div>
+        <div class="input-group"><label>Grava: Absorción (%)</label><input type="number" step="0.01" id="absGrava" value="0.5"></div>
+        <div class="input-group"><label>Grava: Humedad (%)</label><input type="number" step="0.01" id="humGrava" value="2.0"></div>
 
         <!-- Arena -->
-        <div class="section-title">⏳ Características de la Arena</div>
-        <div class="input-group">
-            <label>Densidad Relativa</label>
-            <input type="number" step="0.01" id="denArena" value="2.54">
-        </div>
-        <div class="input-group">
-            <label>Módulo de Finura</label>
-            <input type="number" step="0.01" id="mfArena" value="2.60">
-        </div>
-        <div class="input-group">
-            <label>Absorción (%)</label>
-            <input type="number" step="0.01" id="absArena" value="1.72">
-        </div>
-        <div class="input-group">
-            <label>Humedad (%)</label>
-            <input type="number" step="0.01" id="humArena" value="1.82">
-        </div>
+        <div class="input-group"><label>Arena: Densidad Relativa</label><input type="number" step="0.01" id="denArena" value="2.64"></div>
+        <div class="input-group"><label>Arena: Absorción (%)</label><input type="number" step="0.01" id="absArena" value="0.7"></div>
+        <div class="input-group"><label>Arena: Humedad (%)</label><input type="number" step="0.01" id="humArena" value="6.0"></div>
 
-        <button onclick="calcularDosificacion()">Calcular Dosificación</button>
+        <button class="full-width" onclick="calcular()">Analizar Estructura y Calcular</button>
     </div>
 
-    <!-- Contenedor de Resultados -->
     <div class="results" id="resultados">
-        <h2>Resultados para 1 m³ de Concreto</h2>
-        <p id="infoPasos" style="font-size: 1.05rem; margin-bottom: 2rem;"></p>
+        <div class="alert" id="analisisEstructura"></div>
         
-        <h3>Método de Volúmenes Absolutos</h3>
-        <table id="tablaAbsolutos">
-            <!-- Se llena con JavaScript -->
-        </table>
-
-        <h3>Método de Peso Estimado</h3>
-        <table id="tablaPeso">
-            <!-- Se llena con JavaScript -->
-        </table>
+        <h3>Proporciones Ajustadas por Humedad (1 m³)</h3>
+        <table id="tablaFinal"></table>
     </div>
 </div>
 
 <script>
-    // Tablas de referencia ACI
+    function actualizarCampos() {
+        let tipo = document.getElementById('tipoEstructura').value;
+        document.getElementById('grupoLosa').style.display = (tipo === 'losas') ? 'flex' : 'none';
+    }
+
+    // Tablas exactas ACI 211.1 para evitar diferencias milimétricas
+    const tmnDisponibles = [9.5, 12.5, 19, 25, 37.5, 50]; // en mm
+    const tmnNombres = { 9.5: '3/8"', 12.5: '1/2"', 19: '3/4"', 25: '1"', 37.5: '1 1/2"', 50: '2"' };
+
+    // Agua requerida [Revenimiento Max][TMN]
     const aguaTabla = {
-        "2.5": { "9.5": 207, "12.5": 199, "19": 190, "25": 179 },
-        "7.5": { "9.5": 228, "12.5": 216, "19": 205, "25": 193 },
-        "15":  { "9.5": 243, "12.5": 228, "19": 216, "25": 202 }
+        7.5: { 9.5: 228, 12.5: 216, 19: 205, 25: 193, 37.5: 181, 50: 169 }, // Zapatas, Losas (Max 7.5cm)
+        10:  { 9.5: 228, 12.5: 216, 19: 205, 25: 193, 37.5: 181, 50: 169 }  // Vigas, Columnas (Max 10cm) - ACI agrupa 7.5-10cm en la misma fila usualmente, pero separamos lógicamente.
     };
-    
-    const aireTabla = { "9.5": 3.0, "12.5": 2.5, "19": 2.0, "25": 1.5 };
+    const aireTabla = { 9.5: 3.0, 12.5: 2.5, 19: 2.0, 25: 1.5, 37.5: 1.0, 50: 0.5 };
 
-    function obtenerVolGrava(tmn, mf) {
-        let baseVol = 0;
-        if (tmn == "9.5") baseVol = 0.50 - ((mf - 2.4) / 0.2) * 0.02;
-        if (tmn == "12.5") baseVol = 0.59 - ((mf - 2.4) / 0.2) * 0.02;
-        if (tmn == "19") baseVol = 0.66 - ((mf - 2.4) / 0.2) * 0.02;
-        if (tmn == "25") baseVol = 0.71 - ((mf - 2.4) / 0.2) * 0.02;
-        return parseFloat(baseVol.toFixed(2));
+    function interpolarTablaVolGrava(tmn, mf) {
+        // Valores exactos ACI Tabla 6.3.6 (Volumen de agregado grueso varillado en seco por volumen unitario de concreto)
+        const volGrava = {
+            9.5:  { 2.4: 0.50, 2.6: 0.48, 2.8: 0.46, 3.0: 0.44 },
+            12.5: { 2.4: 0.59, 2.6: 0.57, 2.8: 0.55, 3.0: 0.53 },
+            19:   { 2.4: 0.66, 2.6: 0.64, 2.8: 0.62, 3.0: 0.60 },
+            25:   { 2.4: 0.71, 2.6: 0.69, 2.8: 0.67, 3.0: 0.65 },
+            37.5: { 2.4: 0.75, 2.6: 0.73, 2.8: 0.71, 3.0: 0.69 },
+            50:   { 2.4: 0.78, 2.6: 0.76, 2.8: 0.74, 3.0: 0.72 }
+        };
+        // Interpolación lineal matemática exacta para MF intermedios
+        let mfInf = Math.floor(mf * 5) / 5; // Redondea hacia abajo a múltiplo de 0.2
+        let mfSup = mfInf + 0.2;
+        if(mfInf < 2.4) return volGrava[tmn][2.4];
+        if(mfSup > 3.0) return volGrava[tmn][3.0];
+        if(mf === mfInf) return volGrava[tmn][mfInf];
+
+        let volInf = volGrava[tmn][mfInf];
+        let volSup = volGrava[tmn][mfSup];
+        return volInf + ((mf - mfInf) / 0.2) * (volSup - volInf);
     }
 
-    function obtenerRelacionAC(fcr) {
-        if(fcr >= 350) return 0.48 - ((fcr - 350) * (0.48 - 0.41) / (420 - 350));
-        if(fcr >= 280) return 0.57 - ((fcr - 280) * (0.57 - 0.48) / (350 - 280));
-        if(fcr >= 210) return 0.68 - ((fcr - 210) * (0.68 - 0.57) / (280 - 210));
-        return 0.82; 
+    function interpolarAC(fcr) {
+        // Relación A/C - Concreto sin aire incluido (ACI Tabla 6.3.4)
+        const resistencias = [400, 350, 300, 250, 200, 150];
+        const ac =           [0.42, 0.47, 0.54, 0.61, 0.69, 0.79];
+        
+        if(fcr >= 400) return 0.42;
+        if(fcr <= 150) return 0.79;
+
+        for(let i=0; i<resistencias.length-1; i++) {
+            if(fcr <= resistencias[i] && fcr >= resistencias[i+1]) {
+                return ac[i+1] + ((fcr - resistencias[i+1]) / (resistencias[i] - resistencias[i+1])) * (ac[i] - ac[i+1]);
+            }
+        }
     }
 
-    function calcularDosificacion() {
-        // Capturar datos
+    function calcular() {
+        let tipo = document.getElementById('tipoEstructura').value;
         let fc = parseFloat(document.getElementById('fc').value);
-        let slump = document.getElementById('slump').value;
-        let tmn = document.getElementById('tmn').value;
-        
-        let Gc = parseFloat(document.getElementById('denCem').value);
-        let denGrava = parseFloat(document.getElementById('denGrava').value);
-        let pvscGrava = parseFloat(document.getElementById('pvscGrava').value);
-        let absGrava = parseFloat(document.getElementById('absGrava').value);
-        let humGrava = parseFloat(document.getElementById('humGrava').value);
-        
-        let denArena = parseFloat(document.getElementById('denArena').value);
+        let cimbra = parseFloat(document.getElementById('dimCimbra').value); // cm
+        let varillas = parseFloat(document.getElementById('sepVarillas').value); // cm
+        let espLosa = parseFloat(document.getElementById('espLosa').value); // cm
         let mfArena = parseFloat(document.getElementById('mfArena').value);
-        let absArena = parseFloat(document.getElementById('absArena').value);
-        let humArena = parseFloat(document.getElementById('humArena').value);
 
-        // Cálculos
+        // ACI 6.3.1: Selección de Revenimiento
+        let revMax = (tipo === 'vigas' || tipo === 'columnas') ? 10 : 7.5; // cm
+        let revTexto = (tipo === 'vigas' || tipo === 'columnas') ? '2.5 a 10 cm' : '2.5 a 7.5 cm';
+
+        // ACI 6.3.2: Selección del TMN (Tamaño Máximo Nominal)
+        let tmn1 = (cimbra / 5) * 10; // Pasado a mm
+        let tmn2 = (varillas * 0.75) * 10;
+        let tmn3 = (tipo === 'losas') ? (espLosa / 3) * 10 : 999;
+        let limiteTMN = Math.min(tmn1, tmn2, tmn3);
+
+        // Buscar el TMN comercial más cercano hacia abajo
+        let tmnSeleccionado = 9.5;
+        for (let i = tmnDisponibles.length - 1; i >= 0; i--) {
+            if (tmnDisponibles[i] <= limiteTMN) {
+                tmnSeleccionado = tmnDisponibles[i];
+                break;
+            }
+        }
+
+        // Cálculos Base ACI
         let fcr = fc < 210 ? fc + 70 : (fc <= 350 ? fc + 85 : (1.10 * fc) + 50);
-        let ac = obtenerRelacionAC(fcr);
-        
-        let agua = aguaTabla[slump][tmn];
-        let aire = aireTabla[tmn];
+        let ac = interpolarAC(fcr);
+        let agua = aguaTabla[revMax][tmnSeleccionado];
+        let aire = aireTabla[tmnSeleccionado];
         let cemento = agua / ac;
 
-        let volGravaVarillado = obtenerVolGrava(tmn, mfArena);
-        let pesoGrava = volGravaVarillado * pvscGrava;
+        // Volumen y Pesos
+        let volGravaV = interpolarTablaVolGrava(tmnSeleccionado, mfArena);
+        let pvscGrava = parseFloat(document.getElementById('pvscGrava').value);
+        let pesoGravaSeca = volGravaV * pvscGrava;
+
+        let Gc = parseFloat(document.getElementById('denCem').value);
+        let Gg = parseFloat(document.getElementById('denGrava').value);
+        let Ga = parseFloat(document.getElementById('denArena').value);
 
         let volCem = cemento / (Gc * 1000);
         let volAgua = agua / 1000;
-        let volGrava = pesoGrava / (denGrava * 1000);
+        let volGrava = pesoGravaSeca / (Gg * 1000);
         let volAire = aire / 100;
         
         let volArena = 1 - (volCem + volAgua + volGrava + volAire);
-        let pesoArena = volArena * denArena * 1000;
+        let pesoArenaSeca = volArena * Ga * 1000;
 
-        let Ga = (denGrava + denArena) / 2;
-        let U = (10 * Ga * (100 - aire)) + (cemento * (1 - (Ga / Gc))) - (agua * (Ga - 1));
-        let pesoArenaEstimado = U - (agua + cemento + pesoGrava);
+        // Corrección por Humedad
+        let hG = parseFloat(document.getElementById('humGrava').value);
+        let aG = parseFloat(document.getElementById('absGrava').value);
+        let hA = parseFloat(document.getElementById('humArena').value);
+        let aA = parseFloat(document.getElementById('absArena').value);
 
-        let aguaEnGrava = pesoGrava * ((humGrava - absGrava) / 100);
-        let aguaEnArena = pesoArena * ((humArena - absArena) / 100);
-        let aguaAjustada = agua - (aguaEnGrava + aguaEnArena);
+        let aporteAguaGrava = pesoGravaSeca * ((hG - aG) / 100);
+        let aporteAguaArena = pesoArenaSeca * ((hA - aA) / 100);
         
-        let gravaAjustada = pesoGrava * (1 + (humGrava / 100));
-        let arenaAjustada = pesoArena * (1 + (humArena / 100));
+        let aguaCorregida = agua - (aporteAguaGrava + aporteAguaArena);
+        let gravaHumedad = pesoGravaSeca * (1 + (hG / 100));
+        let arenaHumedad = pesoArenaSeca * (1 + (hA / 100));
 
-        // Mostrar sección de resultados
+        // Mostrar Interfaz
         document.getElementById('resultados').style.display = 'block';
-        
-        // Imprimir resumen
-        document.getElementById('infoPasos').innerHTML = `
-            <strong>F'cr Calculado:</strong> ${fcr.toFixed(2)} kg/cm² <br>
-            <strong>Relación Agua/Cemento:</strong> ${ac.toFixed(2)} <br>
-            <strong>Agua de Diseño:</strong> ${agua} kg/m³ | <strong>Aire:</strong> ${aire}% <br>
-            <strong>Volumen de Grava Varillado:</strong> ${volGravaVarillado} <br>
-            <strong>Ajuste final de Agua:</strong> ${aguaAjustada.toFixed(2)} kg
+        document.getElementById('analisisEstructura').innerHTML = `
+            <strong>📝 Análisis ACI 211.1 basado en dimensiones:</strong><br><br>
+            • <strong>Revenimiento sugerido:</strong> ${revTexto} (Máx. normativo aplicado: ${revMax} cm)<br>
+            • <strong>Límites de TMN calculados:</strong> Cimbra: ${(tmn1/10).toFixed(1)}cm, Acero: ${(tmn2/10).toFixed(1)}cm ${tipo==='losas' ? ', Losa: '+(tmn3/10).toFixed(1)+'cm' : ''}. El menor es ${(limiteTMN/10).toFixed(2)} cm.<br>
+            • <strong>TMN Comercial Asignado:</strong> ${tmnNombres[tmnSeleccionado]} (${tmnSeleccionado} mm)<br>
+            • <strong>Resistencia Promedio ($f'cr$):</strong> ${fcr.toFixed(2)} kg/cm² (Relación A/C = ${ac.toFixed(3)})
         `;
 
-        // Imprimir tabla absolutos
-        document.getElementById('tablaAbsolutos').innerHTML = `
-            <tr><th>Material</th><th>Peso Seco (kg)</th><th>Volumen (m³)</th><th>Peso Ajustado (kg)</th></tr>
-            <tr><td>Cemento</td><td>${cemento.toFixed(2)}</td><td>${volCem.toFixed(4)}</td><td>${cemento.toFixed(2)}</td></tr>
-            <tr><td>Agua</td><td>${agua.toFixed(2)}</td><td>${volAgua.toFixed(4)}</td><td>${aguaAjustada.toFixed(2)}</td></tr>
-            <tr><td>Grava</td><td>${pesoGrava.toFixed(2)}</td><td>${volGrava.toFixed(4)}</td><td>${gravaAjustada.toFixed(2)}</td></tr>
-            <tr><td>Arena</td><td>${pesoArena.toFixed(2)}</td><td>${volArena.toFixed(4)}</td><td>${arenaAjustada.toFixed(2)}</td></tr>
-            <tr><td>Aire</td><td>-</td><td>${volAire.toFixed(4)}</td><td>-</td></tr>
+        document.getElementById('tablaFinal').innerHTML = `
+            <tr><th>Material</th><th>Peso Seco (kg)</th><th>Volumen Abs. (m³)</th><th>Peso en Obra (Húmedo)</th></tr>
+            <tr><td>Cemento</td><td>${cemento.toFixed(1)}</td><td>${volCem.toFixed(4)}</td><td><strong>${cemento.toFixed(1)} kg</strong></td></tr>
+            <tr><td>Agua</td><td>${agua.toFixed(1)}</td><td>${volAgua.toFixed(4)}</td><td><strong>${aguaCorregida.toFixed(1)} Litros</strong></td></tr>
+            <tr><td>Grava</td><td>${pesoGravaSeca.toFixed(1)}</td><td>${volGrava.toFixed(4)}</td><td><strong>${gravaHumedad.toFixed(1)} kg</strong></td></tr>
+            <tr><td>Arena</td><td>${pesoArenaSeca.toFixed(1)}</td><td>${volArena.toFixed(4)}</td><td><strong>${arenaHumedad.toFixed(1)} kg</strong></td></tr>
+            <tr><td>Aire Atrapado</td><td>-</td><td>${volAire.toFixed(4)}</td><td>-</td></tr>
         `;
-
-        // Imprimir tabla peso
-        document.getElementById('tablaPeso').innerHTML = `
-            <tr><th>Material</th><th>Peso Seco (kg)</th></tr>
-            <tr><td>Cemento</td><td>${cemento.toFixed(2)}</td></tr>
-            <tr><td>Agua</td><td>${agua.toFixed(2)}</td></tr>
-            <tr><td>Grava</td><td>${pesoGrava.toFixed(2)}</td></tr>
-            <tr><td>Arena</td><td>${pesoArenaEstimado.toFixed(2)}</td></tr>
-            <tr><td><strong>Densidad Teórica (U)</strong></td><td><strong>${U.toFixed(2)} kg/m³</strong></td></tr>
-        `;
-        
-        // Hacer scroll hacia abajo para ver los resultados automáticamente
         document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
     }
 </script>
