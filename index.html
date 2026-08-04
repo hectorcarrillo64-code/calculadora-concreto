@@ -5,177 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora ACI 211.1 Avanzada</title>
     <style>
-        :root { --primary: #0f766e; --bg: #f0fdfa; --card: #ffffff; --text: #0f172a; --border: #cbd5e1; --accent: #0284c7; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 2rem 1rem; line-height: 1.5; }
-        .container { max-width: 1000px; margin: 0 auto; background: var(--card); padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-top: 0; }
-        .section-title { font-size: 1.2rem; font-weight: bold; margin: 2rem 0 1rem; color: #334155; border-left: 4px solid var(--primary); padding-left: 10px; grid-column: 1 / -1; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
-        .input-group { display: flex; flex-direction: column; gap: 0.4rem; }
-        .row-group { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        :root { --primary: #0f766e; --bg: #f0fdfa; --card: #ffffff; --text: #0f172a; --border: #cbd5e1; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 2rem 1rem; }
+        .container { max-width: 950px; margin: 0 auto; background: var(--card); padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 1rem; }
+        .section-title { font-size: 1.2rem; font-weight: bold; margin: 1.5rem 0 1rem; color: #334155; border-left: 4px solid var(--primary); padding-left: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .input-group { display: flex; flex-direction: column; gap: 0.3rem; }
         label { font-size: 0.9rem; font-weight: 600; }
         input, select { padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
         .full-width { grid-column: 1 / -1; }
-        button { background-color: var(--primary); color: white; border: none; padding: 1.2rem; font-size: 1.1rem; border-radius: 6px; cursor: pointer; transition: 0.2s; margin-top: 2rem; width: 100%; font-weight: bold; }
-        button:hover { background-color: #0d9488; transform: translateY(-2px); }
+        button { background-color: var(--primary); color: white; border: none; padding: 1rem; font-size: 1.1rem; border-radius: 6px; cursor: pointer; transition: 0.2s; margin-top: 1rem; width: 100%; font-weight: bold; }
+        button:hover { background-color: #0d9488; }
         .results { background: #f8fafc; padding: 1.5rem; border-radius: 8px; margin-top: 2rem; border: 1px solid var(--border); display: none; }
-        .alert { background-color: #e0f2fe; border-left: 4px solid var(--accent); padding: 1.5rem; margin-bottom: 1.5rem; font-size: 1rem; }
-        .alert ul { margin: 0.5rem 0 0; padding-left: 1.5rem; }
+        .alert { background-color: #e0f2fe; border-left: 4px solid #0284c7; padding: 1rem; margin-bottom: 1rem; font-size: 0.95rem; }
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; }
         th, td { padding: 0.8rem; text-align: center; border: 1px solid var(--border); }
-        th { background-color: #f1f5f9; color: #334155; }
-        .dynamic-section { background: #f1f5f9; padding: 1rem; border-radius: 8px; border: 1px dashed #94a3b8; }
+        th { background-color: #f1f5f9; }
     </style>
 </head>
-<body onload="actualizarCampos()">
+<body>
 
 <div class="container">
-    <h1>Dosificación ACI 211.1 (Cálculo de Acero)</h1>
+    <h1>Dosificación ACI 211.1 (Selección Automática)</h1>
     
     <div class="grid">
-        <!-- 1. Datos del Elemento -->
-        <div class="section-title">🏗️ 1. Requisitos de la Estructura</div>
+        <div class="full-width section-title">🏗️ 1. Requisitos de la Estructura</div>
         
         <div class="input-group">
-            <label>Tipo de Estructura</label>
+            <label>Tipo de Estructura (ACI Tabla 6.3.1)</label>
             <select id="tipoEstructura" onchange="actualizarCampos()">
+                <option value="zapatas">Zapatas y muros de cimentación</option>
                 <option value="vigas">Vigas y muros reforzados</option>
                 <option value="columnas">Columnas de edificios</option>
                 <option value="losas">Pavimentos y losas</option>
-                <option value="zapatas">Zapatas (Parrillas)</option>
             </select>
         </div>
         <div class="input-group">
             <label>f'c requerido (kg/cm²)</label>
             <input type="number" id="fc" value="250">
         </div>
-        
-        <!-- Dinámico: Configuración de Acero -->
-        <div class="full-width dynamic-section" id="aceroLineal">
-            <h4 style="margin-top: 0; color: var(--accent);">⚙️ Configuración del Armado (Vigas/Columnas)</h4>
-            <div class="grid">
-                <div class="input-group"><label>Ancho total de la sección (cm)</label><input type="number" id="anchoSeccion" value="30"></div>
-                <div class="input-group"><label>Recubrimiento lateral libre (cm)</label><input type="number" step="0.5" id="recubrimiento" value="4.0"></div>
-                
-                <div class="input-group">
-                    <label>Estribos (Transversales)</label>
-                    <select id="estribo">
-                        <option value="0">Sin estribos</option>
-                        <option value="0.64">#2 (1/4")</option>
-                        <option value="0.95" selected>#3 (3/8")</option>
-                        <option value="1.27">#4 (1/2")</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>Varillas Principales</label>
-                    <div class="row-group">
-                        <select id="varilla1">
-                            <option value="0.95">#3 (3/8")</option>
-                            <option value="1.27">#4 (1/2")</option>
-                            <option value="1.59" selected>#5 (5/8")</option>
-                            <option value="1.91">#6 (3/4")</option>
-                            <option value="2.54">#8 (1")</option>
-                            <option value="3.18">#10 (1 1/4")</option>
-                        </select>
-                        <input type="number" id="cantVarilla1" placeholder="Cant." value="3" min="1">
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label>Varillas Secundarias (Opcional)</label>
-                    <div class="row-group">
-                        <select id="varilla2">
-                            <option value="0">Ninguna</option>
-                            <option value="0.95">#3 (3/8")</option>
-                            <option value="1.27">#4 (1/2")</option>
-                            <option value="1.59">#5 (5/8")</option>
-                            <option value="1.91">#6 (3/4")</option>
-                            <option value="2.54">#8 (1")</option>
-                        </select>
-                        <input type="number" id="cantVarilla2" placeholder="Cant." value="0" min="0">
-                    </div>
-                </div>
-            </div>
+        <div class="input-group">
+            <label>Dimensión más estrecha de cimbra (cm)</label>
+            <input type="number" id="dimCimbra" value="30">
+        </div>
+        <div class="input-group">
+            <label>Separación libre entre varillas (cm)</label>
+            <input type="number" id="sepVarillas" value="5">
+        </div>
+        <div class="input-group" id="grupoLosa" style="display:none;">
+            <label>Espesor de la losa (cm)</label>
+            <input type="number" id="espLosa" value="15">
         </div>
 
-        <!-- Dinámico: Configuración de Parrillas (Losas/Zapatas) -->
-        <div class="full-width dynamic-section" id="aceroParrilla" style="display:none;">
-            <h4 style="margin-top: 0; color: var(--accent);">⚙️ Configuración del Armado (Losas/Zapatas)</h4>
-            <div class="grid">
-                <div class="input-group" id="grupoEspesorLosa">
-                    <label>Espesor de la Losa (cm)</label>
-                    <input type="number" id="espLosa" value="15">
-                </div>
-                <div class="input-group" id="grupoDimCimbraZapata" style="display:none;">
-                    <label>Dimensión mínima de excavación/cimbra (cm)</label>
-                    <input type="number" id="dimZapata" value="100">
-                </div>
-                <div class="input-group">
-                    <label>Calibre de Varilla</label>
-                    <select id="varillaParrilla">
-                        <option value="0.95" selected>#3 (3/8")</option>
-                        <option value="1.27">#4 (1/2")</option>
-                        <option value="1.59">#5 (5/8")</option>
-                        <option value="1.91">#6 (3/4")</option>
-                        <option value="2.54">#8 (1")</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Separación centro a centro (a cada... cm)</label>
-                    <input type="number" id="sepParrilla" value="20">
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. Propiedades -->
-        <div class="full-width section-title">🧪 2. Propiedades de los Materiales</div>
+        <div class="full-width section-title">⚙️ 2. Propiedades de los Materiales</div>
         <div class="input-group"><label>Densidad Relativa Cemento</label><input type="number" step="0.01" id="denCem" value="3.15"></div>
-        <div class="input-group"><label>Módulo de Finura Arena</label><input type="number" step="0.01" id="mfArena" value="2.60"></div>
+        <div class="input-group"><label>Módulo de Finura de Arena</label><input type="number" step="0.01" id="mfArena" value="2.60"></div>
         
+        <!-- Grava -->
         <div class="input-group"><label>Grava: Densidad Relativa</label><input type="number" step="0.01" id="denGrava" value="2.68"></div>
         <div class="input-group"><label>Grava: PVSC (kg/m³)</label><input type="number" id="pvscGrava" value="1600"></div>
         <div class="input-group"><label>Grava: Absorción (%)</label><input type="number" step="0.01" id="absGrava" value="0.5"></div>
         <div class="input-group"><label>Grava: Humedad (%)</label><input type="number" step="0.01" id="humGrava" value="2.0"></div>
 
+        <!-- Arena -->
         <div class="input-group"><label>Arena: Densidad Relativa</label><input type="number" step="0.01" id="denArena" value="2.64"></div>
         <div class="input-group"><label>Arena: Absorción (%)</label><input type="number" step="0.01" id="absArena" value="0.7"></div>
         <div class="input-group"><label>Arena: Humedad (%)</label><input type="number" step="0.01" id="humArena" value="6.0"></div>
 
-        <button class="full-width" onclick="calcular()">Calcular Diseño y Ajuste por Humedad</button>
+        <button class="full-width" onclick="calcular()">Analizar Estructura y Calcular</button>
     </div>
 
-    <!-- Resultados -->
     <div class="results" id="resultados">
         <div class="alert" id="analisisEstructura"></div>
-        <h3>Proporciones Finales para 1 m³ (Ajustadas a Obra)</h3>
+        
+        <h3>Proporciones Ajustadas por Humedad (1 m³)</h3>
         <table id="tablaFinal"></table>
     </div>
 </div>
 
 <script>
-    // Mostrar/Ocultar campos dinámicos
     function actualizarCampos() {
         let tipo = document.getElementById('tipoEstructura').value;
-        let esLineal = (tipo === 'vigas' || tipo === 'columnas');
-        
-        document.getElementById('aceroLineal').style.display = esLineal ? 'block' : 'none';
-        document.getElementById('aceroParrilla').style.display = !esLineal ? 'block' : 'none';
-        
-        document.getElementById('grupoEspesorLosa').style.display = (tipo === 'losas') ? 'flex' : 'none';
-        document.getElementById('grupoDimCimbraZapata').style.display = (tipo === 'zapatas') ? 'flex' : 'none';
+        document.getElementById('grupoLosa').style.display = (tipo === 'losas') ? 'flex' : 'none';
     }
 
-    const tmnDisponibles = [9.5, 12.5, 19, 25, 37.5, 50]; 
+    // Tablas exactas ACI 211.1 para evitar diferencias milimétricas
+    const tmnDisponibles = [9.5, 12.5, 19, 25, 37.5, 50]; // en mm
     const tmnNombres = { 9.5: '3/8"', 12.5: '1/2"', 19: '3/4"', 25: '1"', 37.5: '1 1/2"', 50: '2"' };
 
+    // Agua requerida [Revenimiento Max][TMN]
     const aguaTabla = {
-        7.5: { 9.5: 228, 12.5: 216, 19: 205, 25: 193, 37.5: 181, 50: 169 },
-        10:  { 9.5: 228, 12.5: 216, 19: 205, 25: 193, 37.5: 181, 50: 169 } 
+        7.5: { 9.5: 228, 12.5: 216, 19: 205, 25: 193, 37.5: 181, 50: 169 }, // Zapatas, Losas (Max 7.5cm)
+        10:  { 9.5: 228, 12.5: 216, 19: 205, 25: 193, 37.5: 181, 50: 169 }  // Vigas, Columnas (Max 10cm) - ACI agrupa 7.5-10cm en la misma fila usualmente, pero separamos lógicamente.
     };
     const aireTabla = { 9.5: 3.0, 12.5: 2.5, 19: 2.0, 25: 1.5, 37.5: 1.0, 50: 0.5 };
 
     function interpolarTablaVolGrava(tmn, mf) {
+        // Valores exactos ACI Tabla 6.3.6 (Volumen de agregado grueso varillado en seco por volumen unitario de concreto)
         const volGrava = {
             9.5:  { 2.4: 0.50, 2.6: 0.48, 2.8: 0.46, 3.0: 0.44 },
             12.5: { 2.4: 0.59, 2.6: 0.57, 2.8: 0.55, 3.0: 0.53 },
@@ -184,19 +111,26 @@
             37.5: { 2.4: 0.75, 2.6: 0.73, 2.8: 0.71, 3.0: 0.69 },
             50:   { 2.4: 0.78, 2.6: 0.76, 2.8: 0.74, 3.0: 0.72 }
         };
-        let mfInf = Math.floor(mf * 5) / 5; 
+        // Interpolación lineal matemática exacta para MF intermedios
+        let mfInf = Math.floor(mf * 5) / 5; // Redondea hacia abajo a múltiplo de 0.2
         let mfSup = mfInf + 0.2;
         if(mfInf < 2.4) return volGrava[tmn][2.4];
         if(mfSup > 3.0) return volGrava[tmn][3.0];
         if(mf === mfInf) return volGrava[tmn][mfInf];
-        return volGrava[tmn][mfInf] + ((mf - mfInf) / 0.2) * (volGrava[tmn][mfSup] - volGrava[tmn][mfInf]);
+
+        let volInf = volGrava[tmn][mfInf];
+        let volSup = volGrava[tmn][mfSup];
+        return volInf + ((mf - mfInf) / 0.2) * (volSup - volInf);
     }
 
     function interpolarAC(fcr) {
+        // Relación A/C - Concreto sin aire incluido (ACI Tabla 6.3.4)
         const resistencias = [400, 350, 300, 250, 200, 150];
         const ac =           [0.42, 0.47, 0.54, 0.61, 0.69, 0.79];
+        
         if(fcr >= 400) return 0.42;
         if(fcr <= 150) return 0.79;
+
         for(let i=0; i<resistencias.length-1; i++) {
             if(fcr <= resistencias[i] && fcr >= resistencias[i+1]) {
                 return ac[i+1] + ((fcr - resistencias[i+1]) / (resistencias[i] - resistencias[i+1])) * (ac[i] - ac[i+1]);
@@ -207,63 +141,23 @@
     function calcular() {
         let tipo = document.getElementById('tipoEstructura').value;
         let fc = parseFloat(document.getElementById('fc').value);
+        let cimbra = parseFloat(document.getElementById('dimCimbra').value); // cm
+        let varillas = parseFloat(document.getElementById('sepVarillas').value); // cm
+        let espLosa = parseFloat(document.getElementById('espLosa').value); // cm
         let mfArena = parseFloat(document.getElementById('mfArena').value);
-        
-        let sepLibre = 0;
-        let tmn1 = 999, tmn2 = 999, tmn3 = 999;
-        let textoAcero = "";
 
-        // LÓGICA DE SEPARACIÓN LIBRE Y LÍMITES DE TMN
-        if (tipo === 'vigas' || tipo === 'columnas') {
-            let ancho = parseFloat(document.getElementById('anchoSeccion').value);
-            let recub = parseFloat(document.getElementById('recubrimiento').value);
-            let dEstribo = parseFloat(document.getElementById('estribo').value);
-            
-            let d1 = parseFloat(document.getElementById('varilla1').value);
-            let c1 = parseFloat(document.getElementById('cantVarilla1').value) || 0;
-            
-            let d2 = parseFloat(document.getElementById('varilla2').value);
-            let c2 = parseFloat(document.getElementById('cantVarilla2').value) || 0;
+        // ACI 6.3.1: Selección de Revenimiento
+        let revMax = (tipo === 'vigas' || tipo === 'columnas') ? 10 : 7.5; // cm
+        let revTexto = (tipo === 'vigas' || tipo === 'columnas') ? '2.5 a 10 cm' : '2.5 a 7.5 cm';
 
-            let aceroTotalAncho = (d1 * c1) + (d2 * c2);
-            let totalVarillas = c1 + c2;
-            let espacios = totalVarillas - 1;
-
-            // El ancho útil se reduce por los recubrimientos de ambos lados Y los estribos de ambos lados
-            let anchoEfectivo = ancho - (2 * (recub + dEstribo));
-
-            if (espacios > 0) {
-                sepLibre = (anchoEfectivo - aceroTotalAncho) / espacios;
-            } else {
-                sepLibre = 999; // 1 sola varilla (sin conflicto de separación)
-            }
-
-            tmn1 = (ancho / 5) * 10; 
-            tmn2 = (sepLibre * 0.75) * 10;
-            textoAcero = `Se restó el recubrimiento y estribos dejando un ancho útil de ${anchoEfectivo.toFixed(2)} cm repartido en ${espacios} espacios. Separación libre entre varillas: <strong>${sepLibre.toFixed(2)} cm</strong>.`;
-        
-        } else { // Losas y Zapatas
-            let dParrilla = parseFloat(document.getElementById('varillaParrilla').value);
-            let sepParrilla = parseFloat(document.getElementById('sepParrilla').value);
-            sepLibre = sepParrilla - dParrilla; 
-            
-            tmn2 = (sepLibre * 0.75) * 10;
-            
-            if(tipo === 'losas'){
-                let espLosa = parseFloat(document.getElementById('espLosa').value);
-                tmn3 = (espLosa / 3) * 10;
-                tmn1 = 999; 
-                textoAcero = `Separación a cada ${sepParrilla} cm menos diámetro de varilla (${dParrilla} cm). Separación libre: <strong>${sepLibre.toFixed(2)} cm</strong>.`;
-            } else {
-                let dimZapata = parseFloat(document.getElementById('dimZapata').value);
-                tmn1 = (dimZapata / 5) * 10;
-                textoAcero = `Separación a cada ${sepParrilla} cm menos diámetro de varilla (${dParrilla} cm). Separación libre: <strong>${sepLibre.toFixed(2)} cm</strong>.`;
-            }
-        }
-
-        // Determinar TMN comercial
+        // ACI 6.3.2: Selección del TMN (Tamaño Máximo Nominal)
+        let tmn1 = (cimbra / 5) * 10; // Pasado a mm
+        let tmn2 = (varillas * 0.75) * 10;
+        let tmn3 = (tipo === 'losas') ? (espLosa / 3) * 10 : 999;
         let limiteTMN = Math.min(tmn1, tmn2, tmn3);
-        let tmnSeleccionado = 9.5; 
+
+        // Buscar el TMN comercial más cercano hacia abajo
+        let tmnSeleccionado = 9.5;
         for (let i = tmnDisponibles.length - 1; i >= 0; i--) {
             if (tmnDisponibles[i] <= limiteTMN) {
                 tmnSeleccionado = tmnDisponibles[i];
@@ -272,14 +166,13 @@
         }
 
         // Cálculos Base ACI
-        let revMax = (tipo === 'vigas' || tipo === 'columnas') ? 10 : 7.5;
         let fcr = fc < 210 ? fc + 70 : (fc <= 350 ? fc + 85 : (1.10 * fc) + 50);
         let ac = interpolarAC(fcr);
         let agua = aguaTabla[revMax][tmnSeleccionado];
         let aire = aireTabla[tmnSeleccionado];
         let cemento = agua / ac;
 
-        // Volúmenes
+        // Volumen y Pesos
         let volGravaV = interpolarTablaVolGrava(tmnSeleccionado, mfArena);
         let pvscGrava = parseFloat(document.getElementById('pvscGrava').value);
         let pesoGravaSeca = volGravaV * pvscGrava;
@@ -292,39 +185,40 @@
         let volAgua = agua / 1000;
         let volGrava = pesoGravaSeca / (Gg * 1000);
         let volAire = aire / 100;
+        
         let volArena = 1 - (volCem + volAgua + volGrava + volAire);
         let pesoArenaSeca = volArena * Ga * 1000;
 
-        // Humedad
+        // Corrección por Humedad
         let hG = parseFloat(document.getElementById('humGrava').value);
         let aG = parseFloat(document.getElementById('absGrava').value);
         let hA = parseFloat(document.getElementById('humArena').value);
         let aA = parseFloat(document.getElementById('absArena').value);
 
-        let aguaAporte = (pesoGravaSeca * ((hG - aG)/100)) + (pesoArenaSeca * ((hA - aA)/100));
-        let aguaFinal = agua - aguaAporte;
-        let gravaFinal = pesoGravaSeca * (1 + (hG/100));
-        let arenaFinal = pesoArenaSeca * (1 + (hA/100));
+        let aporteAguaGrava = pesoGravaSeca * ((hG - aG) / 100);
+        let aporteAguaArena = pesoArenaSeca * ((hA - aA) / 100);
+        
+        let aguaCorregida = agua - (aporteAguaGrava + aporteAguaArena);
+        let gravaHumedad = pesoGravaSeca * (1 + (hG / 100));
+        let arenaHumedad = pesoArenaSeca * (1 + (hA / 100));
 
-        // UI Resultados
+        // Mostrar Interfaz
         document.getElementById('resultados').style.display = 'block';
         document.getElementById('analisisEstructura').innerHTML = `
-            <strong>📝 Resumen de Decisiones del Sistema:</strong>
-            <ul>
-                <li>${textoAcero}</li>
-                <li><strong>TMN Máximo Teórico:</strong> ${(limiteTMN/10).toFixed(2)} cm. Se asignó agregado de <strong>${tmnNombres[tmnSeleccionado]} (${tmnSeleccionado} mm)</strong> para evitar "panales".</li>
-                <li><strong>Revenimiento sugerido:</strong> Máximo ${revMax} cm según la ACI Tabla 6.3.1.</li>
-                <li><strong>Resistencia de Diseño ($f'cr$):</strong> ${fcr.toFixed(2)} kg/cm² (Con Relación A/C de ${ac.toFixed(3)}).</li>
-            </ul>
+            <strong>📝 Análisis ACI 211.1 basado en dimensiones:</strong><br><br>
+            • <strong>Revenimiento sugerido:</strong> ${revTexto} (Máx. normativo aplicado: ${revMax} cm)<br>
+            • <strong>Límites de TMN calculados:</strong> Cimbra: ${(tmn1/10).toFixed(1)}cm, Acero: ${(tmn2/10).toFixed(1)}cm ${tipo==='losas' ? ', Losa: '+(tmn3/10).toFixed(1)+'cm' : ''}. El menor es ${(limiteTMN/10).toFixed(2)} cm.<br>
+            • <strong>TMN Comercial Asignado:</strong> ${tmnNombres[tmnSeleccionado]} (${tmnSeleccionado} mm)<br>
+            • <strong>Resistencia Promedio ($f'cr$):</strong> ${fcr.toFixed(2)} kg/cm² (Relación A/C = ${ac.toFixed(3)})
         `;
 
         document.getElementById('tablaFinal').innerHTML = `
-            <tr><th>Material</th><th>Estado Seco (kg)</th><th>Volumen (m³)</th><th>Peso Real Húmedo</th></tr>
+            <tr><th>Material</th><th>Peso Seco (kg)</th><th>Volumen Abs. (m³)</th><th>Peso en Obra (Húmedo)</th></tr>
             <tr><td>Cemento</td><td>${cemento.toFixed(1)}</td><td>${volCem.toFixed(4)}</td><td><strong>${cemento.toFixed(1)} kg</strong></td></tr>
-            <tr><td>Agua</td><td>${agua.toFixed(1)}</td><td>${volAgua.toFixed(4)}</td><td><strong>${aguaFinal.toFixed(1)} Litros</strong></td></tr>
-            <tr><td>Grava</td><td>${pesoGravaSeca.toFixed(1)}</td><td>${volGrava.toFixed(4)}</td><td><strong>${gravaFinal.toFixed(1)} kg</strong></td></tr>
-            <tr><td>Arena</td><td>${pesoArenaSeca.toFixed(1)}</td><td>${volArena.toFixed(4)}</td><td><strong>${arenaFinal.toFixed(1)} kg</strong></td></tr>
-            <tr><td>Aire</td><td>-</td><td>${volAire.toFixed(4)}</td><td>-</td></tr>
+            <tr><td>Agua</td><td>${agua.toFixed(1)}</td><td>${volAgua.toFixed(4)}</td><td><strong>${aguaCorregida.toFixed(1)} Litros</strong></td></tr>
+            <tr><td>Grava</td><td>${pesoGravaSeca.toFixed(1)}</td><td>${volGrava.toFixed(4)}</td><td><strong>${gravaHumedad.toFixed(1)} kg</strong></td></tr>
+            <tr><td>Arena</td><td>${pesoArenaSeca.toFixed(1)}</td><td>${volArena.toFixed(4)}</td><td><strong>${arenaHumedad.toFixed(1)} kg</strong></td></tr>
+            <tr><td>Aire Atrapado</td><td>-</td><td>${volAire.toFixed(4)}</td><td>-</td></tr>
         `;
         document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
     }
